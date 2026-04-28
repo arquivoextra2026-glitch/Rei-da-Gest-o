@@ -270,19 +270,69 @@
         bonusDb.push({ source, invested: inv, withdrawn: sac, profit: sac - inv, date: new Date().toLocaleDateString('pt-BR'), id: Date.now() });
         localStorage.setItem('rei_v22_bonus', JSON.stringify(bonusDb));
         renderBonus();
+    }function removeBonus(id) {
+    if (confirm('Tem certeza que quer remover esta operação de bônus?')) {
+        bonusDb = bonusDb.filter(item => item.id !== id);
+        localStorage.setItem('rei_v22_bonus', JSON.stringify(bonusDb));
+        renderBonus();
+    }
     }
 
     function renderBonus() {
-        let tp = 0; const list = document.getElementById('bonusHistory'); list.innerHTML = '';
-        bonusDb.slice().reverse().forEach(i => {
-            tp += i.profit;
-            const div = document.createElement('div');
-            div.className = 'item-list';
-            div.innerHTML = `<div><strong>${i.source}</strong><br><small>Inv: R$ ${i.invested.toFixed(2)}</small></div>
-                             <span style="color:${i.profit >= 0 ? 'var(--success)' : 'var(--danger)'}">R$ ${i.profit.toFixed(2)}</span>`;
-            list.appendChild(div);
-        });
-        document.getElementById('bonusDisplay').innerText = `R$ ${tp.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    let tp = 0;
+    const list = document.getElementById('bonusHistory');
+    list.innerHTML = '';
+
+    bonusDb.slice().reverse().forEach(i => {
+        tp += i.profit;
+
+        const div = document.createElement('div');
+        div.className = 'item-list';
+        div.innerHTML = `
+            <div style="flex: 1;">
+                <strong>${i.source}</strong><br>
+                <small>Inv: R$ \( {i.invested.toFixed(2)} | Saque: R \) ${i.withdrawn.toFixed(2)}</small>
+            </div>
+            <span style="color:${i.profit >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight: bold; margin-right: 10px;">
+                R$ ${i.profit.toFixed(2)}
+            </span>
+            <button onclick="removeBonus(${i.id})" 
+                    style="background: none; border: none; font-size: 22px; color: #e74c3c; padding: 5px 10px;">
+                🗑️
+            </button>`;
+        list.appendChild(div);
+    });
+
+    document.getElementById('bonusDisplay').innerText = 
+        `R$ ${tp.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    }function renderBonus() {
+    let tp = 0;
+    const list = document.getElementById('bonusHistory');
+    list.innerHTML = '';
+
+    bonusDb.slice().reverse().forEach(i => {
+        tp += i.profit;
+
+        const div = document.createElement('div');
+        div.className = 'item-list';
+        div.innerHTML = `
+            <div style="flex: 1;">
+                <strong>${i.source}</strong><br>
+                <small>Inv: R$ \( {i.invested.toFixed(2)} | Saque: R \) ${i.withdrawn.toFixed(2)}</small>
+            </div>
+            <span style="color:${i.profit >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight: bold; margin-right: 10px;">
+                R$ ${i.profit.toFixed(2)}
+            </span>
+            <button onclick="removeBonus(${i.id})" 
+                    style="background: none; border: none; font-size: 22px; color: #e74c3c; padding: 5px 10px;">
+                🗑️
+            </button>`;
+        list.appendChild(div);
+    });
+
+    document.getElementById('bonusDisplay').innerText = 
+        `R$ ${tp.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    }
     }
 
     function loadReports() {
