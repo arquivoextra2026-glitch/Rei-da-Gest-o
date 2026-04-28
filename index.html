@@ -28,7 +28,7 @@
         header { padding: 30px 0 10px 0; text-align: center; }
         .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: 5px; background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
 
-        /* DESTAQUE: BOTÃO DE DOWNLOAD COM PULSAÇÃO */
+        /* DESTAQUE: BOTÃO DE DOWNLOAD COM PULSAÇÃO (Link Atualizado) */
         .btn-download-apk { 
             display: flex; 
             align-items: center; 
@@ -55,7 +55,7 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        /* DESTAQUE: BOTÃO DE APOIO COM GLOW */
+        /* DESTAQUE: BOTÃO DE APOIO COM BORDAS E GLOW */
         .top-support {
             text-align: center;
             margin-bottom: 25px;
@@ -93,7 +93,6 @@
         
         select, input { width: 100%; padding: 16px; background: #000; border: 1px solid #333; border-radius: 14px; color: #fff; font-size: 1rem; outline: none; appearance: none; }
         
-        /* BOTÃO DE AÇÃO PRINCIPAL */
         .btn-action { 
             width: 100%; 
             padding: 18px; 
@@ -107,11 +106,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
-        .about-section { margin-top: 20px; padding: 25px; background: rgba(18, 18, 18, 0.6); border-radius: 24px; border: 1px solid #1a1a1a; text-align: center; }
-        .about-section h3 { color: var(--gold); margin-bottom: 10px; font-size: 1rem; text-transform: uppercase; }
-        .about-section p { color: var(--text-gray); font-size: 0.85rem; line-height: 1.4; margin: 0; }
-
-        /* NAV ATUALIZADA */
         nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 500px; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); padding: 12px; border-radius: 50px; display: flex; justify-content: space-around; border: 1px solid #333; z-index: 1000; }
         .nav-btn { color: var(--text-gray); text-decoration: none; font-size: 0.65rem; font-weight: 700; cursor: pointer; text-align: center; flex: 1; }
         .nav-btn.active { color: var(--gold); }
@@ -125,9 +119,6 @@
 
         .year-summary-card { background: linear-gradient(180deg, #1a1a1a, #0a0a0a); border: 1px solid #333; border-radius: 20px; padding: 25px; margin-bottom: 15px; border-top: 2px solid var(--gold); }
         .year-title { color: var(--gold); text-align: center; font-weight: 800; margin-bottom: 20px; letter-spacing: 2px; }
-        
-        .bonus-summary-card { background: linear-gradient(180deg, #1a1a1a, #0a0a0a); border: 1px solid #333; border-radius: 20px; padding: 25px; margin-bottom: 25px; border-top: 2px solid var(--bonus-color); }
-        .bonus-report-title { color: var(--bonus-color); text-align: center; font-weight: 800; margin-bottom: 20px; letter-spacing: 2px; }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .stat-box { background: #000; padding: 15px; border-radius: 15px; border: 1px solid #222; }
@@ -243,8 +234,8 @@
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('rei_v30_cash')) || [];
-    let bonusDb = JSON.parse(localStorage.getItem('rei_v30_bonus')) || [];
+    let db = JSON.parse(localStorage.getItem('rei_v31_cash')) || [];
+    let bonusDb = JSON.parse(localStorage.getItem('rei_v31_bonus')) || [];
 
     document.getElementById('regDate').valueAsDate = new Date();
     document.getElementById('bonusDate').valueAsDate = new Date();
@@ -274,15 +265,16 @@
         const t = document.getElementById('type').value;
         if(!dt || !d || isNaN(v)) return alert("Preencha tudo!");
         db.push({ d, v, t, dt, id: Date.now() });
-        localStorage.setItem('rei_v30_cash', JSON.stringify(db));
+        localStorage.setItem('rei_v31_cash', JSON.stringify(db));
         updateUI();
         alert("Salvo!");
+        document.getElementById('val').value = "";
     }
 
     function deleteItem(id) {
-        if(confirm("Excluir?")) {
+        if(confirm("Excluir registro?")) {
             db = db.filter(i => i.id !== id);
-            localStorage.setItem('rei_v30_cash', JSON.stringify(db));
+            localStorage.setItem('rei_v31_cash', JSON.stringify(db));
             updateUI(); loadReports();
         }
     }
@@ -300,7 +292,7 @@
         const sac = parseFloat(document.getElementById('bonusWithdrawn').value) || 0;
         if(!dtRaw) return alert("Data!");
         bonusDb.push({ source, invested: inv, withdrawn: sac, profit: sac - inv, rawDate: dtRaw, id: Date.now() });
-        localStorage.setItem('rei_v30_bonus', JSON.stringify(bonusDb));
+        localStorage.setItem('rei_v31_bonus', JSON.stringify(bonusDb));
         renderBonus();
         alert("Salvo!");
     }
@@ -325,7 +317,7 @@
     function deleteBonus(id) {
         if(confirm("Excluir?")) {
             bonusDb = bonusDb.filter(i => i.id !== id);
-            localStorage.setItem('rei_v30_bonus', JSON.stringify(bonusDb));
+            localStorage.setItem('rei_v31_bonus', JSON.stringify(bonusDb));
             renderBonus();
         }
     }
