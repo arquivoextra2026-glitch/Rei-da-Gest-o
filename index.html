@@ -28,6 +28,27 @@
         header { padding: 30px 0 10px 0; text-align: center; }
         .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: 5px; background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
 
+        /* ESTILO DO BOTÃO DE DOWNLOAD APK NO TOPO */
+        .btn-download-apk { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px; 
+            text-decoration: none; 
+            padding: 14px; 
+            background: rgba(212, 175, 55, 0.1); 
+            border: 1px solid var(--gold); 
+            color: var(--gold); 
+            border-radius: 14px; 
+            font-weight: 800; 
+            font-size: 0.85rem; 
+            text-transform: uppercase; 
+            transition: 0.3s; 
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
+        }
+        .btn-download-apk:active { transform: scale(0.98); }
+
         .top-support {
             text-align: center;
             margin-bottom: 25px;
@@ -76,7 +97,6 @@
         .year-summary-card { background: linear-gradient(180deg, #1a1a1a, #0a0a0a); border: 1px solid #333; border-radius: 20px; padding: 25px; margin-bottom: 15px; border-top: 2px solid var(--gold); }
         .year-title { color: var(--gold); text-align: center; font-weight: 800; margin-bottom: 20px; letter-spacing: 2px; }
         
-        /* NOVO CARD DE BÔNUS NO RELATÓRIO */
         .bonus-summary-card { background: linear-gradient(180deg, #1a1a1a, #0a0a0a); border: 1px solid #333; border-radius: 20px; padding: 25px; margin-bottom: 25px; border-top: 2px solid var(--bonus-color); }
         .bonus-report-title { color: var(--bonus-color); text-align: center; font-weight: 800; margin-bottom: 20px; letter-spacing: 2px; }
 
@@ -95,6 +115,11 @@
 <div class="app-container">
     
     <main id="dash" class="page active">
+        
+        <a href="https://kodular.app/OUP-SLR" target="_blank" class="btn-download-apk">
+            <span>📥</span> Baixar Aplicativo Rei da Gestão
+        </a>
+
         <div class="top-support">
             <p class="support-msg">
                 <span>Sua contribuição simbólica via <strong>Mercado Pago</strong></span>
@@ -216,8 +241,9 @@
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('rei_v25_cash')) || [];
-    let bonusDb = JSON.parse(localStorage.getItem('rei_v25_bonus')) || [];
+    // Usando v27 para garantir limpeza de caches antigos se necessário
+    let db = JSON.parse(localStorage.getItem('rei_v27_cash')) || [];
+    let bonusDb = JSON.parse(localStorage.getItem('rei_v27_bonus')) || [];
 
     document.getElementById('regDate').valueAsDate = new Date();
     document.getElementById('bonusDate').valueAsDate = new Date();
@@ -247,7 +273,7 @@
         const t = document.getElementById('type').value;
         if(!dt || !d || isNaN(v)) return alert("Preencha todos os campos!");
         db.push({ d, v, t, dt, id: Date.now() });
-        localStorage.setItem('rei_v25_cash', JSON.stringify(db));
+        localStorage.setItem('rei_v27_cash', JSON.stringify(db));
         updateUI();
         alert("Registrado!");
         document.getElementById('desc').value = ""; document.getElementById('val').value = "";
@@ -256,7 +282,7 @@
     function deleteItem(id) {
         if(confirm("Excluir este registro?")) {
             db = db.filter(i => i.id !== id);
-            localStorage.setItem('rei_v25_cash', JSON.stringify(db));
+            localStorage.setItem('rei_v27_cash', JSON.stringify(db));
             updateUI(); loadReports();
         }
     }
@@ -264,7 +290,7 @@
     function deleteBonus(id) {
         if(confirm("Excluir este registro de bônus?")) {
             bonusDb = bonusDb.filter(i => i.id !== id);
-            localStorage.setItem('rei_v25_bonus', JSON.stringify(bonusDb));
+            localStorage.setItem('rei_v27_bonus', JSON.stringify(bonusDb));
             renderBonus();
             if(document.getElementById('repo').classList.contains('active')) loadReports();
         }
@@ -287,7 +313,7 @@
             source, invested: inv, withdrawn: sac, profit: sac - inv, 
             date: dtRaw.split('-').reverse().join('/'), rawDate: dtRaw, id: Date.now() 
         });
-        localStorage.setItem('rei_v25_bonus', JSON.stringify(bonusDb));
+        localStorage.setItem('rei_v27_bonus', JSON.stringify(bonusDb));
         renderBonus();
         document.getElementById('bonusInvested').value = ""; document.getElementById('bonusWithdrawn').value = "";
         alert("Bônus salvo!");
@@ -315,7 +341,6 @@
         const list = document.getElementById('reportList');
         list.innerHTML = '';
         
-        // Relatório Executivo Geral
         let yIn = 0, yOut = 0;
         db.forEach(i => { if(i.t === 'in') yIn += i.v; else yOut += i.v; });
         document.getElementById('yearIn').innerText = `R$ ${yIn.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
@@ -323,7 +348,6 @@
         document.getElementById('yearBalance').innerText = `R$ ${(yIn-yOut).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
         document.getElementById('yearBalance').style.color = (yIn-yOut) >= 0 ? 'var(--success)' : 'var(--danger)';
 
-        // Relatório de Bônus/Métodos
         let bInv = 0, bSac = 0;
         bonusDb.forEach(i => { bInv += i.invested; bSac += i.withdrawn; });
         document.getElementById('repoBonusInv').innerText = `R$ ${bInv.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
@@ -331,7 +355,6 @@
         document.getElementById('repoBonusProfit').innerText = `R$ ${(bSac-bInv).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
         document.getElementById('repoBonusProfit').style.color = (bSac-bInv) >= 0 ? 'var(--success)' : 'var(--bonus-color)';
 
-        // Listagem Mensal
         let mIn = 0, mOut = 0;
         db.filter(i => i.dt.startsWith(fMonth)).sort((a,b) => new Date(b.dt) - new Date(a.dt)).forEach(i => {
             if(i.t === 'in') mIn += i.v; else mOut += i.v;
