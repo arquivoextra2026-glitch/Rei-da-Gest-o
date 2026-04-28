@@ -28,7 +28,6 @@
         header { padding: 30px 0 10px 0; text-align: center; }
         .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: 5px; background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
 
-        /* DESTAQUE 1: BOTÃO DE DOWNLOAD COM PULSAÇÃO ANIMADA */
         .btn-download-apk { 
             display: flex; 
             align-items: center; 
@@ -55,7 +54,6 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
         }
 
-        /* DESTAQUE 2: ÁREA DE APOIO COM BRILHO INTERNO (GLOW) */
         .top-support {
             text-align: center;
             margin-bottom: 25px;
@@ -80,7 +78,6 @@
         }
         .btn-support:hover { background: var(--gold); color: #000; box-shadow: 0 0 25px rgba(212, 175, 55, 0.5); }
 
-        /* DESTAQUE 3: BOTÃO DE REGISTRO ROBUSTO */
         .btn-action { 
             width: 100%; 
             padding: 20px; 
@@ -112,7 +109,6 @@
         .page.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* NAVEGAÇÃO AJUSTADA */
         nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 500px; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); padding: 12px; border-radius: 50px; display: flex; justify-content: space-around; border: 1px solid #333; z-index: 1000; }
         .nav-btn { color: var(--text-gray); text-decoration: none; font-size: 0.65rem; font-weight: 700; cursor: pointer; text-align: center; flex: 1; }
         .nav-btn.active { color: var(--gold); }
@@ -211,13 +207,13 @@
             <div class="input-group"><input type="date" id="bonusDate"></div>
             <div class="input-group">
                 <select id="bonusSource">
-                    <option value="Bônus">🎁 Bônus</option>
-                    <option value="Giros Grátis">🎰 Giros Grátis</option>
-                    <option value="Método de Giros Grátis">🛠️ Método de Giros Grátis</option>
+                    <option value="Freebet" selected>🎟️ Freebet</option>
+                    <option value="Métodos giros gratis">🛠️ Métodos giros gratis</option>
+                    <option value="Giros gratis">🎰 Giros gratis</option>
                 </select>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <input type="number" id="bonusInvested" placeholder="Inv. (R$)"><input type="number" id="bonusWithdrawn" placeholder="Saque (R$)">
+                <input type="number" id="bonusInvested" placeholder="Inv. (R\( )"><input type="number" id="bonusWithdrawn" placeholder="Saque (R \))">
             </div>
             <button class="btn-action" style="background: var(--bonus-grad); color: white; margin-top: 15px;" onclick="saveBonus()">Salvar Operação</button>
         </div>
@@ -294,9 +290,9 @@
             const div = document.createElement('div');
             div.className = 'item-list';
             div.style.borderLeftColor = 'var(--bonus-color)';
-            div.innerHTML = `<div><strong>${i.source}</strong><br><small>R$ ${i.invested.toFixed(2)} | ${i.rawDate}</small></div>
+            div.innerHTML = `<div><strong>\( {i.source}</strong><br><small>R \) ${i.invested.toFixed(2)} | ${i.rawDate}</small></div>
                              <div style="display:flex; align-items:center;">
-                                <span style="color:${i.profit >= 0 ? 'var(--success)' : 'var(--danger)'}; margin-right:15px">R$ ${i.profit.toFixed(2)}</span>
+                                <span style="color:\( {i.profit >= 0 ? 'var(--success)' : 'var(--danger)'}; margin-right:15px">R \) ${i.profit.toFixed(2)}</span>
                                 <button class="btn-del" onclick="deleteBonus(${i.id})">🗑️</button>
                              </div>`;
             list.appendChild(div);
@@ -333,9 +329,9 @@
         db.filter(i => i.dt.startsWith(fMonth)).sort((a,b) => new Date(b.dt) - new Date(a.dt)).forEach(i => {
             const div = document.createElement('div');
             div.className = 'item-list';
-            div.innerHTML = `<div><strong>${i.d}</strong><br><small>${i.dt}</small></div>
+            div.innerHTML = `<div><strong>\( {i.d}</strong><br><small> \){i.dt}</small></div>
                              <div style="display:flex; align-items:center;">
-                                <span style="color:${i.t === 'in' ? 'var(--success)' : 'var(--danger)'}; margin-right:15px">R$ ${i.v.toFixed(2)}</span>
+                                <span style="color:\( {i.t === 'in' ? 'var(--success)' : 'var(--danger)'}; margin-right:15px">R \) ${i.v.toFixed(2)}</span>
                                 <button class="btn-del" onclick="deleteItem(${i.id})">🗑️</button>
                              </div>`;
             list.appendChild(div);
