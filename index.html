@@ -28,26 +28,27 @@
         header { padding: 30px 0 10px 0; text-align: center; }
         .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: 5px; background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
 
-        /* ESTILO DO BOTÃO DE DOWNLOAD APK NO TOPO */
+        /* BOTÃO DE DOWNLOAD APK AJUSTADO */
         .btn-download-apk { 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            gap: 10px; 
+            gap: 8px; 
             text-decoration: none; 
-            padding: 14px; 
-            background: rgba(212, 175, 55, 0.1); 
+            padding: 10px 20px; 
+            background: rgba(212, 175, 55, 0.08); 
             border: 1px solid var(--gold); 
             color: var(--gold); 
-            border-radius: 14px; 
-            font-weight: 800; 
-            font-size: 0.85rem; 
+            border-radius: 10px; 
+            font-weight: 700; 
+            font-size: 0.75rem; 
             text-transform: uppercase; 
             transition: 0.3s; 
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
+            margin: 0 auto 25px auto;
+            width: fit-content;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
-        .btn-download-apk:active { transform: scale(0.98); }
+        .btn-download-apk:active { transform: scale(0.96); }
 
         .top-support {
             text-align: center;
@@ -116,8 +117,8 @@
     
     <main id="dash" class="page active">
         
-        <a href="https://kodular.app/OUP-SLR" target="_blank" class="btn-download-apk">
-            <span>📥</span> Baixar Aplicativo Rei da Gestão
+        <a href="https://kodular.app/CBX-QYD" target="_blank" class="btn-download-apk">
+            <span>🤖</span> Baixar Aplicativo Android (APK)
         </a>
 
         <div class="top-support">
@@ -241,9 +242,8 @@
 </nav>
 
 <script>
-    // Usando v27 para garantir limpeza de caches antigos se necessário
-    let db = JSON.parse(localStorage.getItem('rei_v27_cash')) || [];
-    let bonusDb = JSON.parse(localStorage.getItem('rei_v27_bonus')) || [];
+    let db = JSON.parse(localStorage.getItem('rei_v28_cash')) || [];
+    let bonusDb = JSON.parse(localStorage.getItem('rei_v28_bonus')) || [];
 
     document.getElementById('regDate').valueAsDate = new Date();
     document.getElementById('bonusDate').valueAsDate = new Date();
@@ -273,7 +273,7 @@
         const t = document.getElementById('type').value;
         if(!dt || !d || isNaN(v)) return alert("Preencha todos os campos!");
         db.push({ d, v, t, dt, id: Date.now() });
-        localStorage.setItem('rei_v27_cash', JSON.stringify(db));
+        localStorage.setItem('rei_v28_cash', JSON.stringify(db));
         updateUI();
         alert("Registrado!");
         document.getElementById('desc').value = ""; document.getElementById('val').value = "";
@@ -282,7 +282,7 @@
     function deleteItem(id) {
         if(confirm("Excluir este registro?")) {
             db = db.filter(i => i.id !== id);
-            localStorage.setItem('rei_v27_cash', JSON.stringify(db));
+            localStorage.setItem('rei_v28_cash', JSON.stringify(db));
             updateUI(); loadReports();
         }
     }
@@ -290,7 +290,7 @@
     function deleteBonus(id) {
         if(confirm("Excluir este registro de bônus?")) {
             bonusDb = bonusDb.filter(i => i.id !== id);
-            localStorage.setItem('rei_v27_bonus', JSON.stringify(bonusDb));
+            localStorage.setItem('rei_v28_bonus', JSON.stringify(bonusDb));
             renderBonus();
             if(document.getElementById('repo').classList.contains('active')) loadReports();
         }
@@ -313,7 +313,7 @@
             source, invested: inv, withdrawn: sac, profit: sac - inv, 
             date: dtRaw.split('-').reverse().join('/'), rawDate: dtRaw, id: Date.now() 
         });
-        localStorage.setItem('rei_v27_bonus', JSON.stringify(bonusDb));
+        localStorage.setItem('rei_v28_bonus', JSON.stringify(bonusDb));
         renderBonus();
         document.getElementById('bonusInvested').value = ""; document.getElementById('bonusWithdrawn').value = "";
         alert("Bônus salvo!");
