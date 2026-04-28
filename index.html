@@ -16,6 +16,7 @@
             --success: #00e676;
             --danger: #ff5252;
             --bonus-color: #a855f7;
+            --bonus-grad: linear-gradient(145deg, #a855f7, #c084fc, #7e22ce);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -72,8 +73,13 @@
         .item-list { background: #151515; padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--gold); }
         .btn-del { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1.2rem; padding: 5px 10px; }
 
-        .year-summary-card { background: linear-gradient(180deg, #1a1a1a, #0a0a0a); border: 1px solid #333; border-radius: 20px; padding: 25px; margin-bottom: 25px; border-top: 2px solid var(--gold); }
+        .year-summary-card { background: linear-gradient(180deg, #1a1a1a, #0a0a0a); border: 1px solid #333; border-radius: 20px; padding: 25px; margin-bottom: 15px; border-top: 2px solid var(--gold); }
         .year-title { color: var(--gold); text-align: center; font-weight: 800; margin-bottom: 20px; letter-spacing: 2px; }
+        
+        /* NOVO CARD DE BÔNUS NO RELATÓRIO */
+        .bonus-summary-card { background: linear-gradient(180deg, #1a1a1a, #0a0a0a); border: 1px solid #333; border-radius: 20px; padding: 25px; margin-bottom: 25px; border-top: 2px solid var(--bonus-color); }
+        .bonus-report-title { color: var(--bonus-color); text-align: center; font-weight: 800; margin-bottom: 20px; letter-spacing: 2px; }
+
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .stat-box { background: #000; padding: 15px; border-radius: 15px; border: 1px solid #222; }
         .stat-box small { color: var(--text-gray); font-size: 0.6rem; text-transform: uppercase; display: block; margin-bottom: 5px; }
@@ -141,6 +147,7 @@
 
     <section id="repo" class="page">
         <h2 style="margin-bottom: 25px; color: var(--gold); text-align: center;">Centro de Inteligência</h2>
+        
         <div class="year-summary-card">
             <div class="year-title">RELATÓRIO EXECUTIVO</div>
             <div class="stats-grid">
@@ -148,9 +155,21 @@
                 <div class="stat-box"><small>Custos Totais</small><span id="yearOut" style="color:var(--danger)">R$ 0,00</span></div>
             </div>
             <div class="stat-box" style="margin-top:15px; text-align: center;">
-                <small>Margem Líquida Anual</small><span id="yearBalance" style="font-size:1.5rem">R$ 0,00</span>
+                <small>Margem Líquida Geral</small><span id="yearBalance" style="font-size:1.5rem">R$ 0,00</span>
             </div>
         </div>
+
+        <div class="bonus-summary-card">
+            <div class="bonus-report-title">DESEMPENHO DE MÉTODOS</div>
+            <div class="stats-grid">
+                <div class="stat-box"><small>Total Investido</small><span id="repoBonusInv" style="color:var(--text-white)">R$ 0,00</span></div>
+                <div class="stat-box"><small>Total Sacado</small><span id="repoBonusSac" style="color:var(--success)">R$ 0,00</span></div>
+            </div>
+            <div class="stat-box" style="margin-top:15px; text-align: center;">
+                <small>Lucro Líquido Métodos</small><span id="repoBonusProfit" style="font-size:1.5rem; color:var(--bonus-color)">R$ 0,00</span>
+            </div>
+        </div>
+
         <div class="form-card">
             <h3 class="form-title">Detalhamento Mensal</h3>
             <input type="month" id="filterMonth" onchange="loadReports()">
@@ -197,10 +216,9 @@
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('rei_v24_cash')) || [];
-    let bonusDb = JSON.parse(localStorage.getItem('rei_v24_bonus')) || [];
+    let db = JSON.parse(localStorage.getItem('rei_v25_cash')) || [];
+    let bonusDb = JSON.parse(localStorage.getItem('rei_v25_bonus')) || [];
 
-    // Datas padrão
     document.getElementById('regDate').valueAsDate = new Date();
     document.getElementById('bonusDate').valueAsDate = new Date();
     document.getElementById('filterMonth').value = new Date().toISOString().slice(0, 7);
@@ -229,7 +247,7 @@
         const t = document.getElementById('type').value;
         if(!dt || !d || isNaN(v)) return alert("Preencha todos os campos!");
         db.push({ d, v, t, dt, id: Date.now() });
-        localStorage.setItem('rei_v24_cash', JSON.stringify(db));
+        localStorage.setItem('rei_v25_cash', JSON.stringify(db));
         updateUI();
         alert("Registrado!");
         document.getElementById('desc').value = ""; document.getElementById('val').value = "";
@@ -238,7 +256,7 @@
     function deleteItem(id) {
         if(confirm("Excluir este registro?")) {
             db = db.filter(i => i.id !== id);
-            localStorage.setItem('rei_v24_cash', JSON.stringify(db));
+            localStorage.setItem('rei_v25_cash', JSON.stringify(db));
             updateUI(); loadReports();
         }
     }
@@ -246,8 +264,9 @@
     function deleteBonus(id) {
         if(confirm("Excluir este registro de bônus?")) {
             bonusDb = bonusDb.filter(i => i.id !== id);
-            localStorage.setItem('rei_v24_bonus', JSON.stringify(bonusDb));
+            localStorage.setItem('rei_v25_bonus', JSON.stringify(bonusDb));
             renderBonus();
+            if(document.getElementById('repo').classList.contains('active')) loadReports();
         }
     }
 
@@ -259,38 +278,24 @@
 
     function saveBonus() {
         const dtRaw = document.getElementById('bonusDate').value;
-        if(!dtRaw) return alert("Selecione a data!");
-        
         const source = document.getElementById('bonusSource').value;
         const inv = parseFloat(document.getElementById('bonusInvested').value) || 0;
         const sac = parseFloat(document.getElementById('bonusWithdrawn').value) || 0;
-        
-        // Formata data para exibir bonitinho na lista
-        const dateFormatted = dtRaw.split('-').reverse().join('/');
+        if(!dtRaw) return alert("Selecione a data!");
 
         bonusDb.push({ 
-            source, 
-            invested: inv, 
-            withdrawn: sac, 
-            profit: sac - inv, 
-            date: dateFormatted, 
-            rawDate: dtRaw,
-            id: Date.now() 
+            source, invested: inv, withdrawn: sac, profit: sac - inv, 
+            date: dtRaw.split('-').reverse().join('/'), rawDate: dtRaw, id: Date.now() 
         });
-        
-        localStorage.setItem('rei_v24_bonus', JSON.stringify(bonusDb));
+        localStorage.setItem('rei_v25_bonus', JSON.stringify(bonusDb));
         renderBonus();
-        document.getElementById('bonusInvested').value = ""; 
-        document.getElementById('bonusWithdrawn').value = "";
+        document.getElementById('bonusInvested').value = ""; document.getElementById('bonusWithdrawn').value = "";
+        alert("Bônus salvo!");
     }
 
     function renderBonus() {
         let tp = 0; const list = document.getElementById('bonusHistory'); list.innerHTML = '';
-        
-        // Ordena por data antes de exibir
-        const sortedBonus = bonusDb.sort((a,b) => new Date(b.rawDate) - new Date(a.rawDate));
-
-        sortedBonus.forEach(i => {
+        bonusDb.sort((a,b) => new Date(b.rawDate) - new Date(a.rawDate)).forEach(i => {
             tp += i.profit;
             const div = document.createElement('div');
             div.className = 'item-list';
@@ -309,13 +314,25 @@
         const fMonth = document.getElementById('filterMonth').value;
         const list = document.getElementById('reportList');
         list.innerHTML = '';
-        let yIn = 0, yOut = 0, mIn = 0, mOut = 0;
+        
+        // Relatório Executivo Geral
+        let yIn = 0, yOut = 0;
         db.forEach(i => { if(i.t === 'in') yIn += i.v; else yOut += i.v; });
-        document.getElementById('yearIn').innerText = `R$ ${yIn.toFixed(2)}`;
-        document.getElementById('yearOut').innerText = `R$ ${yOut.toFixed(2)}`;
-        document.getElementById('yearBalance').innerText = `R$ ${(yIn-yOut).toFixed(2)}`;
+        document.getElementById('yearIn').innerText = `R$ ${yIn.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('yearOut').innerText = `R$ ${yOut.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('yearBalance').innerText = `R$ ${(yIn-yOut).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
         document.getElementById('yearBalance').style.color = (yIn-yOut) >= 0 ? 'var(--success)' : 'var(--danger)';
 
+        // Relatório de Bônus/Métodos
+        let bInv = 0, bSac = 0;
+        bonusDb.forEach(i => { bInv += i.invested; bSac += i.withdrawn; });
+        document.getElementById('repoBonusInv').innerText = `R$ ${bInv.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('repoBonusSac').innerText = `R$ ${bSac.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('repoBonusProfit').innerText = `R$ ${(bSac-bInv).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('repoBonusProfit').style.color = (bSac-bInv) >= 0 ? 'var(--success)' : 'var(--bonus-color)';
+
+        // Listagem Mensal
+        let mIn = 0, mOut = 0;
         db.filter(i => i.dt.startsWith(fMonth)).sort((a,b) => new Date(b.dt) - new Date(a.dt)).forEach(i => {
             if(i.t === 'in') mIn += i.v; else mOut += i.v;
             const div = document.createElement('div');
@@ -327,7 +344,7 @@
                              </div>`;
             list.appendChild(div);
         });
-        document.getElementById('monthSummary').innerHTML = `<div style="display:flex; justify-content:space-between; font-weight:bold"><span>Saldo:</span><span style="color:${(mIn-mOut) >= 0 ? 'var(--success)' : 'var(--danger)'}">R$ ${(mIn-mOut).toFixed(2)}</span></div>`;
+        document.getElementById('monthSummary').innerHTML = `<div style="display:flex; justify-content:space-between; font-weight:bold"><span>Saldo Mensal:</span><span style="color:${(mIn-mOut) >= 0 ? 'var(--success)' : 'var(--danger)'}">R$ ${(mIn-mOut).toFixed(2)}</span></div>`;
     }
     updateUI();
 </script>
