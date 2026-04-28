@@ -78,10 +78,6 @@
         .stat-box { background: #000; padding: 15px; border-radius: 15px; border: 1px solid #222; }
         .stat-box small { color: var(--text-gray); font-size: 0.6rem; text-transform: uppercase; display: block; margin-bottom: 5px; }
         .stat-box span { font-weight: 800; font-size: 1rem; }
-        .progress-container { margin-top: 20px; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-gray); margin-bottom: 5px; }
-        .progress-bar { width: 100%; height: 8px; background: #222; border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--gold-grad); transition: 0.5s; }
     </style>
 </head>
 <body>
@@ -109,12 +105,10 @@
 
         <div class="form-card">
             <h3 class="form-title">Novo Lançamento</h3>
-            
             <div class="input-group">
                 <label>Data do Registro</label>
                 <input type="date" id="regDate">
             </div>
-
             <div class="input-group">
                 <label>Categoria</label>
                 <div class="select-wrapper">
@@ -128,17 +122,14 @@
                     </select>
                 </div>
             </div>
-            
             <div class="input-group">
                 <label>Descrição</label>
                 <input type="text" id="desc" placeholder="Ex: Aluguel ou Freelance">
             </div>
-            
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="input-group"><label>Valor (R$)</label><input type="number" id="val" placeholder="0.00"></div>
                 <div class="input-group"><label>Tipo</label><select id="type"><option value="in">Entrada</option><option value="out">Saída</option></select></div>
             </div>
-            
             <button class="btn-action" onclick="save()">Confirmar Registro</button>
         </div>
 
@@ -152,18 +143,12 @@
         <h2 style="margin-bottom: 25px; color: var(--gold); text-align: center;">Centro de Inteligência</h2>
         <div class="year-summary-card">
             <div class="year-title">RELATÓRIO EXECUTIVO</div>
-            <div id="yearContent">
-                <div class="stats-grid">
-                    <div class="stat-box"><small>Faturamento</small><span id="yearIn" style="color:var(--success)">R$ 0,00</span></div>
-                    <div class="stat-box"><small>Custos Totais</small><span id="yearOut" style="color:var(--danger)">R$ 0,00</span></div>
-                </div>
-                <div class="stat-box" style="margin-top:15px; text-align: center;">
-                    <small>Margem Líquida Anual</small><span id="yearBalance" style="font-size:1.5rem">R$ 0,00</span>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-label"><span>Eficiência de Gastos</span><span id="effPercent">0%</span></div>
-                    <div class="progress-bar"><div id="effBar" class="progress-fill" style="width: 0%"></div></div>
-                </div>
+            <div class="stats-grid">
+                <div class="stat-box"><small>Faturamento</small><span id="yearIn" style="color:var(--success)">R$ 0,00</span></div>
+                <div class="stat-box"><small>Custos Totais</small><span id="yearOut" style="color:var(--danger)">R$ 0,00</span></div>
+            </div>
+            <div class="stat-box" style="margin-top:15px; text-align: center;">
+                <small>Margem Líquida Anual</small><span id="yearBalance" style="font-size:1.5rem">R$ 0,00</span>
             </div>
         </div>
         <div class="form-card">
@@ -206,11 +191,11 @@
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('rei_v22_cash')) || [];
-    let bonusDb = JSON.parse(localStorage.getItem('rei_v22_bonus')) || [];
+    let db = JSON.parse(localStorage.getItem('rei_v23_cash')) || [];
+    let bonusDb = JSON.parse(localStorage.getItem('rei_v23_bonus')) || [];
 
-    // Define data de hoje no input ao carregar
     document.getElementById('regDate').valueAsDate = new Date();
+    document.getElementById('filterMonth').value = new Date().toISOString().slice(0, 7);
 
     function openPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -234,26 +219,27 @@
         const d = document.getElementById('desc').value;
         const v = parseFloat(document.getElementById('val').value);
         const t = document.getElementById('type').value;
-        
-        if(!dt || !d || isNaN(v)) return alert("Preencha todos os campos, incluindo a data!");
-        
+        if(!dt || !d || isNaN(v)) return alert("Preencha todos os campos!");
         db.push({ d, v, t, dt, id: Date.now() });
-        localStorage.setItem('rei_v22_cash', JSON.stringify(db));
+        localStorage.setItem('rei_v23_cash', JSON.stringify(db));
         updateUI();
-        alert("Lançamento Registrado!");
-        
-        // Limpa campos mas mantém a data
-        document.getElementById('desc').value = "";
-        document.getElementById('val').value = "";
-        document.getElementById('categorySelect').value = "";
+        alert("Registrado!");
+        document.getElementById('desc').value = ""; document.getElementById('val').value = "";
     }
 
     function deleteItem(id) {
-        if(confirm("Deseja excluir este registro?")) {
+        if(confirm("Excluir este registro?")) {
             db = db.filter(i => i.id !== id);
-            localStorage.setItem('rei_v22_cash', JSON.stringify(db));
-            updateUI();
-            loadReports();
+            localStorage.setItem('rei_v23_cash', JSON.stringify(db));
+            updateUI(); loadReports();
+        }
+    }
+
+    function deleteBonus(id) {
+        if(confirm("Excluir este registro de bônus?")) {
+            bonusDb = bonusDb.filter(i => i.id !== id);
+            localStorage.setItem('rei_v23_bonus', JSON.stringify(bonusDb));
+            renderBonus();
         }
     }
 
@@ -268,8 +254,9 @@
         const inv = parseFloat(document.getElementById('bonusInvested').value) || 0;
         const sac = parseFloat(document.getElementById('bonusWithdrawn').value) || 0;
         bonusDb.push({ source, invested: inv, withdrawn: sac, profit: sac - inv, date: new Date().toLocaleDateString('pt-BR'), id: Date.now() });
-        localStorage.setItem('rei_v22_bonus', JSON.stringify(bonusDb));
+        localStorage.setItem('rei_v23_bonus', JSON.stringify(bonusDb));
         renderBonus();
+        document.getElementById('bonusInvested').value = ""; document.getElementById('bonusWithdrawn').value = "";
     }
 
     function renderBonus() {
@@ -278,38 +265,29 @@
             tp += i.profit;
             const div = document.createElement('div');
             div.className = 'item-list';
-            div.innerHTML = `<div><strong>${i.source}</strong><br><small>Inv: R$ ${i.invested.toFixed(2)}</small></div>
-                             <span style="color:${i.profit >= 0 ? 'var(--success)' : 'var(--danger)'}">R$ ${i.profit.toFixed(2)}</span>`;
+            div.style.borderLeftColor = 'var(--bonus-color)';
+            div.innerHTML = `<div><strong>${i.source}</strong><br><small>Inv: R$ ${i.invested.toFixed(2)} | ${i.date}</small></div>
+                             <div style="display:flex; align-items:center;">
+                                <span style="color:${i.profit >= 0 ? 'var(--success)' : 'var(--danger)'}; margin-right:15px">R$ ${i.profit.toFixed(2)}</span>
+                                <button class="btn-del" onclick="deleteBonus(${i.id})">🗑️</button>
+                             </div>`;
             list.appendChild(div);
         });
         document.getElementById('bonusDisplay').innerText = `R$ ${tp.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
     }
 
     function loadReports() {
-        const fMonth = document.getElementById('filterMonth').value || new Date().toISOString().slice(0, 7);
+        const fMonth = document.getElementById('filterMonth').value;
         const list = document.getElementById('reportList');
         list.innerHTML = '';
-        let yIn = 0, yOut = 0;
-        
-        // Relatório geral baseado no DB
+        let yIn = 0, yOut = 0, mIn = 0, mOut = 0;
         db.forEach(i => { if(i.t === 'in') yIn += i.v; else yOut += i.v; });
-        
         document.getElementById('yearIn').innerText = `R$ ${yIn.toFixed(2)}`;
         document.getElementById('yearOut').innerText = `R$ ${yOut.toFixed(2)}`;
-        const yBal = yIn - yOut;
-        const yBalEl = document.getElementById('yearBalance');
-        yBalEl.innerText = `R$ ${yBal.toFixed(2)}`;
-        yBalEl.style.color = yBal >= 0 ? 'var(--success)' : 'var(--danger)';
-        
-        const perc = yIn > 0 ? Math.min((yOut / yIn) * 100, 100) : 0;
-        document.getElementById('effPercent').innerText = perc.toFixed(1) + '%';
-        document.getElementById('effBar').style.width = perc + '%';
-        
-        let mIn = 0, mOut = 0;
-        // Filtra por mês e ordena por data (mais recente primeiro)
-        db.filter(i => i.dt.startsWith(fMonth))
-          .sort((a, b) => new Date(b.dt) - new Date(a.dt))
-          .forEach(i => {
+        document.getElementById('yearBalance').innerText = `R$ ${(yIn-yOut).toFixed(2)}`;
+        document.getElementById('yearBalance').style.color = (yIn-yOut) >= 0 ? 'var(--success)' : 'var(--danger)';
+
+        db.filter(i => i.dt.startsWith(fMonth)).sort((a,b) => new Date(b.dt) - new Date(a.dt)).forEach(i => {
             if(i.t === 'in') mIn += i.v; else mOut += i.v;
             const div = document.createElement('div');
             div.className = 'item-list';
@@ -320,7 +298,7 @@
                              </div>`;
             list.appendChild(div);
         });
-        document.getElementById('monthSummary').innerHTML = `<div style="display:flex; justify-content:space-between; font-weight:bold"><span>Saldo do Mês:</span><span style="color:${(mIn-mOut) >= 0 ? 'var(--success)' : 'var(--danger)'}">R$ ${(mIn-mOut).toFixed(2)}</span></div>`;
+        document.getElementById('monthSummary').innerHTML = `<div style="display:flex; justify-content:space-between; font-weight:bold"><span>Saldo:</span><span style="color:${(mIn-mOut) >= 0 ? 'var(--success)' : 'var(--danger)'}">R$ ${(mIn-mOut).toFixed(2)}</span></div>`;
     }
     updateUI();
 </script>
