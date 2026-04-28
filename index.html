@@ -163,6 +163,12 @@
         <div class="hero-card" style="border-color: var(--bonus-color);"><span class="balance-label">Lucro Líquido</span><div class="balance-value" id="bonusDisplay" style="color: var(--bonus-color);">R$ 0,00</div></div>
         <div class="form-card">
             <h3 class="form-title" style="color: var(--bonus-color);">Controle de Saque</h3>
+            
+            <div class="input-group">
+                <label style="color: var(--text-gray);">Data do Método</label>
+                <input type="date" id="bonusDate">
+            </div>
+
             <div class="input-group">
                 <select id="bonusSource">
                     <option value="Bônus">🎁 Bônus</option>
@@ -191,10 +197,12 @@
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('rei_v23_cash')) || [];
-    let bonusDb = JSON.parse(localStorage.getItem('rei_v23_bonus')) || [];
+    let db = JSON.parse(localStorage.getItem('rei_v24_cash')) || [];
+    let bonusDb = JSON.parse(localStorage.getItem('rei_v24_bonus')) || [];
 
+    // Datas padrão
     document.getElementById('regDate').valueAsDate = new Date();
+    document.getElementById('bonusDate').valueAsDate = new Date();
     document.getElementById('filterMonth').value = new Date().toISOString().slice(0, 7);
 
     function openPage(id) {
@@ -221,7 +229,7 @@
         const t = document.getElementById('type').value;
         if(!dt || !d || isNaN(v)) return alert("Preencha todos os campos!");
         db.push({ d, v, t, dt, id: Date.now() });
-        localStorage.setItem('rei_v23_cash', JSON.stringify(db));
+        localStorage.setItem('rei_v24_cash', JSON.stringify(db));
         updateUI();
         alert("Registrado!");
         document.getElementById('desc').value = ""; document.getElementById('val').value = "";
@@ -230,7 +238,7 @@
     function deleteItem(id) {
         if(confirm("Excluir este registro?")) {
             db = db.filter(i => i.id !== id);
-            localStorage.setItem('rei_v23_cash', JSON.stringify(db));
+            localStorage.setItem('rei_v24_cash', JSON.stringify(db));
             updateUI(); loadReports();
         }
     }
@@ -238,7 +246,7 @@
     function deleteBonus(id) {
         if(confirm("Excluir este registro de bônus?")) {
             bonusDb = bonusDb.filter(i => i.id !== id);
-            localStorage.setItem('rei_v23_bonus', JSON.stringify(bonusDb));
+            localStorage.setItem('rei_v24_bonus', JSON.stringify(bonusDb));
             renderBonus();
         }
     }
@@ -250,18 +258,39 @@
     }
 
     function saveBonus() {
+        const dtRaw = document.getElementById('bonusDate').value;
+        if(!dtRaw) return alert("Selecione a data!");
+        
         const source = document.getElementById('bonusSource').value;
         const inv = parseFloat(document.getElementById('bonusInvested').value) || 0;
         const sac = parseFloat(document.getElementById('bonusWithdrawn').value) || 0;
-        bonusDb.push({ source, invested: inv, withdrawn: sac, profit: sac - inv, date: new Date().toLocaleDateString('pt-BR'), id: Date.now() });
-        localStorage.setItem('rei_v23_bonus', JSON.stringify(bonusDb));
+        
+        // Formata data para exibir bonitinho na lista
+        const dateFormatted = dtRaw.split('-').reverse().join('/');
+
+        bonusDb.push({ 
+            source, 
+            invested: inv, 
+            withdrawn: sac, 
+            profit: sac - inv, 
+            date: dateFormatted, 
+            rawDate: dtRaw,
+            id: Date.now() 
+        });
+        
+        localStorage.setItem('rei_v24_bonus', JSON.stringify(bonusDb));
         renderBonus();
-        document.getElementById('bonusInvested').value = ""; document.getElementById('bonusWithdrawn').value = "";
+        document.getElementById('bonusInvested').value = ""; 
+        document.getElementById('bonusWithdrawn').value = "";
     }
 
     function renderBonus() {
         let tp = 0; const list = document.getElementById('bonusHistory'); list.innerHTML = '';
-        bonusDb.slice().reverse().forEach(i => {
+        
+        // Ordena por data antes de exibir
+        const sortedBonus = bonusDb.sort((a,b) => new Date(b.rawDate) - new Date(a.rawDate));
+
+        sortedBonus.forEach(i => {
             tp += i.profit;
             const div = document.createElement('div');
             div.className = 'item-list';
