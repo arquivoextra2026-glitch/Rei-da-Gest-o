@@ -257,18 +257,72 @@
         if (sel === "Personalizado") { descEl.value = ""; descEl.focus(); } 
         else { descEl.value = sel; if (sel === 'Salário') typeEl.value = 'in'; else typeEl.value = 'out'; }
     }
+<script>
+    // ... (o resto do teu JS fica igual)
 
-    function save() {
-        const dt = document.getElementById('regDate').value;
-        const d = document.getElementById('desc').value;
-        const v = parseFloat(document.getElementById('val').value);
-        const t = document.getElementById('type').value;
-        if(!dt || !d || isNaN(v)) return alert("Preencha tudo!");
-        db.push({ d, v, t, dt, id: Date.now() });
-        localStorage.setItem('rei_v31_cash', JSON.stringify(db));
-        updateUI();
-        alert("Salvo!");
-        document.getElementById('val').value = "";
+    function saveBonus() {
+        const source = document.getElementById('bonusSource').value;
+        const inv = parseFloat(document.getElementById('bonusInvested').value) || 0;
+        const sac = parseFloat(document.getElementById('bonusWithdrawn').value) || 0;
+
+        bonusDb.push({
+            source,
+            invested: inv,
+            withdrawn: sac,
+            profit: sac - inv,
+            date: new Date().toLocaleDateString('pt-BR'),
+            id: Date.now()
+        });
+
+        localStorage.setItem('rei_v22_bonus', JSON.stringify(bonusDb));
+        renderBonus();
+        
+        // Limpa os campos
+        document.getElementById('bonusSource').value = '';
+        document.getElementById('bonusInvested').value = '';
+        document.getElementById('bonusWithdrawn').value = '';
+    }
+
+    function removeBonus(id) {
+        if (confirm('Tem certeza que quer remover esta operação de bônus?')) {
+            bonusDb = bonusDb.filter(item => item.id !== id);
+            localStorage.setItem('rei_v22_bonus', JSON.stringify(bonusDb));
+            renderBonus();
+        }
+    }
+
+    function renderBonus() {
+        let tp = 0;
+        const list = document.getElementById('bonusHistory');
+        list.innerHTML = '';
+
+        bonusDb.slice().reverse().forEach(i => {
+            tp += i.profit;
+
+            const div = document.createElement('div');
+            div.className = 'item-list';
+            div.innerHTML = `
+                <div style="flex: 1;">
+                    <strong>${i.source}</strong><br>
+                    <small>Inv: R$ \( {i.invested.toFixed(2)} | Saque: R \) ${i.withdrawn.toFixed(2)}</small>
+                </div>
+                <span style="color:${i.profit >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight: bold; margin-right: 10px;">
+                    R$ ${i.profit.toFixed(2)}
+                </span>
+                <button onclick="removeBonus(${i.id})" 
+                        style="background: none; border: none; font-size: 22px; color: #e74c3c; padding: 5px 10px;">
+                    🗑
+                </button>
+            `;
+            list.appendChild(div);
+        });
+
+        document.getElementById('bonusDisplay').innerText = 
+            `R$ ${tp.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    }
+
+    // ... (resto do teu script)
+</script>
     }
 
     function deleteItem(id) {
