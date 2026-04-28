@@ -28,58 +28,39 @@
         header { padding: 30px 0 10px 0; text-align: center; }
         .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: 5px; background: var(--gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
 
-        /* DESTAQUE: BOTÃO DE DOWNLOAD COM PULSAÇÃO (Link Atualizado) */
+        /* BOTÃO DE DOWNLOAD APK AJUSTADO */
         .btn-download-apk { 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             gap: 8px; 
             text-decoration: none; 
-            padding: 12px 25px; 
-            background: var(--gold-grad); 
-            border: none; 
-            color: #000; 
-            border-radius: 12px; 
-            font-weight: 800; 
+            padding: 10px 20px; 
+            background: rgba(212, 175, 55, 0.08); 
+            border: 1px solid var(--gold); 
+            color: var(--gold); 
+            border-radius: 10px; 
+            font-weight: 700; 
             font-size: 0.75rem; 
             text-transform: uppercase; 
             transition: 0.3s; 
             margin: 0 auto 25px auto;
             width: fit-content;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-            animation: pulse 2s infinite;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-            70% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
-        }
+        .btn-download-apk:active { transform: scale(0.96); }
 
-        /* DESTAQUE: BOTÃO DE APOIO COM BORDAS E GLOW */
         .top-support {
             text-align: center;
             margin-bottom: 25px;
             padding: 25px 15px;
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(212, 175, 55, 0.05);
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
         }
         .support-msg { font-size: 0.85rem; color: var(--text-gray); margin-bottom: 18px; line-height: 1.4; }
-        .btn-support { 
-            display: inline-block; 
-            text-decoration: none; 
-            padding: 14px 30px; 
-            background: transparent;
-            color: var(--gold); 
-            border: 2px solid var(--gold);
-            border-radius: 12px; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            font-size: 0.8rem; 
-            transition: 0.3s;
-            box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.1);
-        }
-        .btn-support:hover { background: var(--gold); color: #000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+        .support-msg span { display: block; }
+        .btn-support { display: inline-block; text-decoration: none; padding: 14px 30px; background: var(--gold-grad); color: #000; border-radius: 12px; font-weight: 800; text-transform: uppercase; font-size: 0.8rem; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); transition: 0.3s; }
 
         .hero-card { background: linear-gradient(145deg, #1a1a1a, #0d0d0d); border: 1px solid #222; border-radius: 24px; padding: 30px 20px; text-align: center; margin-bottom: 30px; }
         .balance-label { color: var(--text-gray); text-transform: uppercase; font-size: 0.7rem; letter-spacing: 2px; }
@@ -92,22 +73,19 @@
         .input-group label { display: block; font-size: 0.7rem; color: var(--text-gray); margin-bottom: 8px; text-transform: uppercase; }
         
         select, input { width: 100%; padding: 16px; background: #000; border: 1px solid #333; border-radius: 14px; color: #fff; font-size: 1rem; outline: none; appearance: none; }
-        
-        .btn-action { 
-            width: 100%; 
-            padding: 18px; 
-            background: var(--gold-grad); 
-            border: none; 
-            border-radius: 14px; 
-            color: #000; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1) brightness(0.8) sepia(1) hue-rotate(-15deg) saturate(5); cursor: pointer; }
 
-        nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 500px; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); padding: 12px; border-radius: 50px; display: flex; justify-content: space-around; border: 1px solid #333; z-index: 1000; }
-        .nav-btn { color: var(--text-gray); text-decoration: none; font-size: 0.65rem; font-weight: 700; cursor: pointer; text-align: center; flex: 1; }
+        .select-wrapper { position: relative; }
+        .select-wrapper::after { content: '▼'; font-size: 0.8rem; color: var(--gold); position: absolute; right: 15px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+
+        .btn-action { width: 100%; padding: 18px; background: var(--gold-grad); border: none; border-radius: 14px; color: #000; font-weight: 800; text-transform: uppercase; cursor: pointer; }
+
+        .about-section { margin-top: 20px; padding: 25px; background: rgba(18, 18, 18, 0.6); border-radius: 24px; border: 1px solid #1a1a1a; text-align: center; }
+        .about-section h3 { color: var(--gold); margin-bottom: 10px; font-size: 1rem; text-transform: uppercase; }
+        .about-section p { color: var(--text-gray); font-size: 0.85rem; line-height: 1.4; margin: 0; }
+
+        nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 500px; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); padding: 15px; border-radius: 50px; display: flex; justify-content: space-around; border: 1px solid #333; z-index: 1000; }
+        .nav-btn { color: var(--text-gray); text-decoration: none; font-size: 0.7rem; font-weight: 700; cursor: pointer; text-align: center; }
         .nav-btn.active { color: var(--gold); }
 
         .page { display: none; animation: slideUp 0.4s ease-out; }
@@ -119,6 +97,9 @@
 
         .year-summary-card { background: linear-gradient(180deg, #1a1a1a, #0a0a0a); border: 1px solid #333; border-radius: 20px; padding: 25px; margin-bottom: 15px; border-top: 2px solid var(--gold); }
         .year-title { color: var(--gold); text-align: center; font-weight: 800; margin-bottom: 20px; letter-spacing: 2px; }
+        
+        .bonus-summary-card { background: linear-gradient(180deg, #1a1a1a, #0a0a0a); border: 1px solid #333; border-radius: 20px; padding: 25px; margin-bottom: 25px; border-top: 2px solid var(--bonus-color); }
+        .bonus-report-title { color: var(--bonus-color); text-align: center; font-weight: 800; margin-bottom: 20px; letter-spacing: 2px; }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .stat-box { background: #000; padding: 15px; border-radius: 15px; border: 1px solid #222; }
@@ -144,8 +125,9 @@
             <p class="support-msg">
                 <span>Sua contribuição simbólica via <strong>Mercado Pago</strong></span>
                 <span>fortalece o desenvolvimento do <strong>Rei da Gestão</strong></span>
+                <span>e impulsiona a criação de novos projetos.</span>
             </p>
-            <a href="https://mpago.la/1nuPQr3" target="_blank" class="btn-support">Apoiar Projetos</a>
+            <a href="https://mpago.la/1nuPQr3" target="_blank" class="btn-support">Apoiar com Valor Simbólico</a>
         </div>
 
         <div class="hero-card">
@@ -161,18 +143,20 @@
             </div>
             <div class="input-group">
                 <label>Categoria</label>
-                <select id="categorySelect" onchange="applyCategory()">
-                    <option value="" selected disabled>Escolha...</option>
-                    <option value="Salário">💰 Salário</option>
-                    <option value="Água/Luz">🚰 Água e Luz</option>
-                    <option value="Internet">🌐 Internet</option>
-                    <option value="Mercado">🛒 Mercado</option>
-                    <option value="Personalizado">✏️ Outros...</option>
-                </select>
+                <div class="select-wrapper">
+                    <select id="categorySelect" onchange="applyCategory()">
+                        <option value="" selected disabled>Escolha...</option>
+                        <option value="Salário">💰 Salário</option>
+                        <option value="Água/Luz">🚰 Água e Luz</option>
+                        <option value="Internet">🌐 Internet</option>
+                        <option value="Mercado">🛒 Mercado</option>
+                        <option value="Personalizado">✏️ Digitar outros...</option>
+                    </select>
+                </div>
             </div>
             <div class="input-group">
                 <label>Descrição</label>
-                <input type="text" id="desc" placeholder="Escreva aqui...">
+                <input type="text" id="desc" placeholder="Ex: Aluguel ou Freelance">
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="input-group"><label>Valor (R$)</label><input type="number" id="val" placeholder="0.00"></div>
@@ -180,19 +164,35 @@
             </div>
             <button class="btn-action" onclick="save()">Confirmar Registro</button>
         </div>
+
+        <section class="about-section">
+            <h3>A Jornada do Poder</h3>
+            <p>O <strong>Rei da Gestão</strong> é a sua ferramenta de clareza financeira. Lembre-se que o app fornece a visão, mas você fornece a disciplina de anotar cada gasto e ganho diariamente para atingir o domínio absoluto.</p>
+        </section>
     </main>
 
     <section id="repo" class="page">
-        <h2 style="margin-bottom: 25px; color: var(--gold); text-align: center;">Relatório Geral</h2>
+        <h2 style="margin-bottom: 25px; color: var(--gold); text-align: center;">Centro de Inteligência</h2>
         
         <div class="year-summary-card">
-            <div class="year-title">EXECUTIVO</div>
+            <div class="year-title">RELATÓRIO EXECUTIVO</div>
             <div class="stats-grid">
                 <div class="stat-box"><small>Faturamento</small><span id="yearIn" style="color:var(--success)">R$ 0,00</span></div>
                 <div class="stat-box"><small>Custos Totais</small><span id="yearOut" style="color:var(--danger)">R$ 0,00</span></div>
             </div>
             <div class="stat-box" style="margin-top:15px; text-align: center;">
-                <small>Margem Líquida</small><span id="yearBalance" style="font-size:1.5rem">R$ 0,00</span>
+                <small>Margem Líquida Geral</small><span id="yearBalance" style="font-size:1.5rem">R$ 0,00</span>
+            </div>
+        </div>
+
+        <div class="bonus-summary-card">
+            <div class="bonus-report-title">DESEMPENHO DE MÉTODOS</div>
+            <div class="stats-grid">
+                <div class="stat-box"><small>Total Investido</small><span id="repoBonusInv" style="color:var(--text-white)">R$ 0,00</span></div>
+                <div class="stat-box"><small>Total Sacado</small><span id="repoBonusSac" style="color:var(--success)">R$ 0,00</span></div>
+            </div>
+            <div class="stat-box" style="margin-top:15px; text-align: center;">
+                <small>Lucro Líquido Métodos</small><span id="repoBonusProfit" style="font-size:1.5rem; color:var(--bonus-color)">R$ 0,00</span>
             </div>
         </div>
 
@@ -205,12 +205,15 @@
     </section>
 
     <section id="bonus" class="page">
-        <h2 style="margin-bottom: 25px; color: var(--bonus-color); text-align: center;">Relatório Métodos</h2>
         <div class="hero-card" style="border-color: var(--bonus-color);"><span class="balance-label">Lucro Líquido</span><div class="balance-value" id="bonusDisplay" style="color: var(--bonus-color);">R$ 0,00</div></div>
-        
         <div class="form-card">
-            <h3 class="form-title" style="color: var(--bonus-color);">Novo Saque</h3>
-            <div class="input-group"><input type="date" id="bonusDate"></div>
+            <h3 class="form-title" style="color: var(--bonus-color);">Controle de Saque</h3>
+            
+            <div class="input-group">
+                <label style="color: var(--text-gray);">Data do Método</label>
+                <input type="date" id="bonusDate">
+            </div>
+
             <div class="input-group">
                 <select id="bonusSource">
                     <option value="Bônus">🎁 Bônus</option>
@@ -221,21 +224,26 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <input type="number" id="bonusInvested" placeholder="Inv. (R$)"><input type="number" id="bonusWithdrawn" placeholder="Saque (R$)">
             </div>
-            <button class="btn-action" style="background: var(--bonus-grad); color: white; margin-top: 15px;" onclick="saveBonus()">Salvar Operação</button>
+            <button class="btn-action" style="background: var(--bonus-color); color: white; margin-top: 15px;" onclick="saveBonus()">Salvar Operação</button>
         </div>
         <div id="bonusHistory"></div>
+
+        <section class="about-section" style="border-color: rgba(168, 85, 247, 0.3);">
+            <h3 style="color: var(--bonus-color);">A Visão do Estrategista</h3>
+            <p>O sucesso nos métodos não vem da sorte, mas da gestão rigorosa. Ao anotar cada investimento e cada saque, você terá a prova real do seu lucro no final do mês, gerando clareza e poder sobre sua evolução.</p>
+        </section>
     </section>
 </div>
 
 <nav>
-    <div class="nav-btn active" id="btn-dash" onclick="openPage('dash')">📊<br>Dashboard</div>
-    <div class="nav-btn" id="btn-repo" onclick="openPage('repo')">📁<br>Relatório Geral</div>
-    <div class="nav-btn" id="btn-bonus" onclick="openPage('bonus')">🎰<br>Relatório Métodos</div>
+    <div class="nav-btn active" id="btn-dash" onclick="openPage('dash')">📊<br>Dash</div>
+    <div class="nav-btn" id="btn-repo" onclick="openPage('repo')">📁<br>Relatos</div>
+    <div class="nav-btn" id="btn-bonus" onclick="openPage('bonus')">🎰<br>Métodos</div>
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('rei_v31_cash')) || [];
-    let bonusDb = JSON.parse(localStorage.getItem('rei_v31_bonus')) || [];
+    let db = JSON.parse(localStorage.getItem('rei_v28_cash')) || [];
+    let bonusDb = JSON.parse(localStorage.getItem('rei_v28_bonus')) || [];
 
     document.getElementById('regDate').valueAsDate = new Date();
     document.getElementById('bonusDate').valueAsDate = new Date();
@@ -257,79 +265,34 @@
         if (sel === "Personalizado") { descEl.value = ""; descEl.focus(); } 
         else { descEl.value = sel; if (sel === 'Salário') typeEl.value = 'in'; else typeEl.value = 'out'; }
     }
-<script>
-    // ... (o resto do teu JS fica igual)
 
-    function saveBonus() {
-        const source = document.getElementById('bonusSource').value;
-        const inv = parseFloat(document.getElementById('bonusInvested').value) || 0;
-        const sac = parseFloat(document.getElementById('bonusWithdrawn').value) || 0;
-
-        bonusDb.push({
-            source,
-            invested: inv,
-            withdrawn: sac,
-            profit: sac - inv,
-            date: new Date().toLocaleDateString('pt-BR'),
-            id: Date.now()
-        });
-
-        localStorage.setItem('rei_v22_bonus', JSON.stringify(bonusDb));
-        renderBonus();
-        
-        // Limpa os campos
-        document.getElementById('bonusSource').value = '';
-        document.getElementById('bonusInvested').value = '';
-        document.getElementById('bonusWithdrawn').value = '';
-    }
-
-    function removeBonus(id) {
-        if (confirm('Tem certeza que quer remover esta operação de bônus?')) {
-            bonusDb = bonusDb.filter(item => item.id !== id);
-            localStorage.setItem('rei_v22_bonus', JSON.stringify(bonusDb));
-            renderBonus();
-        }
-    }
-
-    function renderBonus() {
-        let tp = 0;
-        const list = document.getElementById('bonusHistory');
-        list.innerHTML = '';
-
-        bonusDb.slice().reverse().forEach(i => {
-            tp += i.profit;
-
-            const div = document.createElement('div');
-            div.className = 'item-list';
-            div.innerHTML = `
-                <div style="flex: 1;">
-                    <strong>${i.source}</strong><br>
-                    <small>Inv: R$ \( {i.invested.toFixed(2)} | Saque: R \) ${i.withdrawn.toFixed(2)}</small>
-                </div>
-                <span style="color:${i.profit >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight: bold; margin-right: 10px;">
-                    R$ ${i.profit.toFixed(2)}
-                </span>
-                <button onclick="removeBonus(${i.id})" 
-                        style="background: none; border: none; font-size: 22px; color: #e74c3c; padding: 5px 10px;">
-                    🗑
-                </button>
-            `;
-            list.appendChild(div);
-        });
-
-        document.getElementById('bonusDisplay').innerText = 
-            `R$ ${tp.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-    }
-
-    // ... (resto do teu script)
-</script>
+    function save() {
+        const dt = document.getElementById('regDate').value;
+        const d = document.getElementById('desc').value;
+        const v = parseFloat(document.getElementById('val').value);
+        const t = document.getElementById('type').value;
+        if(!dt || !d || isNaN(v)) return alert("Preencha todos os campos!");
+        db.push({ d, v, t, dt, id: Date.now() });
+        localStorage.setItem('rei_v28_cash', JSON.stringify(db));
+        updateUI();
+        alert("Registrado!");
+        document.getElementById('desc').value = ""; document.getElementById('val').value = "";
     }
 
     function deleteItem(id) {
-        if(confirm("Excluir registro?")) {
+        if(confirm("Excluir este registro?")) {
             db = db.filter(i => i.id !== id);
-            localStorage.setItem('rei_v31_cash', JSON.stringify(db));
+            localStorage.setItem('rei_v28_cash', JSON.stringify(db));
             updateUI(); loadReports();
+        }
+    }
+
+    function deleteBonus(id) {
+        if(confirm("Excluir este registro de bônus?")) {
+            bonusDb = bonusDb.filter(i => i.id !== id);
+            localStorage.setItem('rei_v28_bonus', JSON.stringify(bonusDb));
+            renderBonus();
+            if(document.getElementById('repo').classList.contains('active')) loadReports();
         }
     }
 
@@ -344,11 +307,16 @@
         const source = document.getElementById('bonusSource').value;
         const inv = parseFloat(document.getElementById('bonusInvested').value) || 0;
         const sac = parseFloat(document.getElementById('bonusWithdrawn').value) || 0;
-        if(!dtRaw) return alert("Data!");
-        bonusDb.push({ source, invested: inv, withdrawn: sac, profit: sac - inv, rawDate: dtRaw, id: Date.now() });
-        localStorage.setItem('rei_v31_bonus', JSON.stringify(bonusDb));
+        if(!dtRaw) return alert("Selecione a data!");
+
+        bonusDb.push({ 
+            source, invested: inv, withdrawn: sac, profit: sac - inv, 
+            date: dtRaw.split('-').reverse().join('/'), rawDate: dtRaw, id: Date.now() 
+        });
+        localStorage.setItem('rei_v28_bonus', JSON.stringify(bonusDb));
         renderBonus();
-        alert("Salvo!");
+        document.getElementById('bonusInvested').value = ""; document.getElementById('bonusWithdrawn').value = "";
+        alert("Bônus salvo!");
     }
 
     function renderBonus() {
@@ -358,7 +326,7 @@
             const div = document.createElement('div');
             div.className = 'item-list';
             div.style.borderLeftColor = 'var(--bonus-color)';
-            div.innerHTML = `<div><strong>${i.source}</strong><br><small>R$ ${i.invested.toFixed(2)} | ${i.rawDate}</small></div>
+            div.innerHTML = `<div><strong>${i.source}</strong><br><small>Inv: R$ ${i.invested.toFixed(2)} | ${i.date}</small></div>
                              <div style="display:flex; align-items:center;">
                                 <span style="color:${i.profit >= 0 ? 'var(--success)' : 'var(--danger)'}; margin-right:15px">R$ ${i.profit.toFixed(2)}</span>
                                 <button class="btn-del" onclick="deleteBonus(${i.id})">🗑️</button>
@@ -368,37 +336,42 @@
         document.getElementById('bonusDisplay').innerText = `R$ ${tp.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
     }
 
-    function deleteBonus(id) {
-        if(confirm("Excluir?")) {
-            bonusDb = bonusDb.filter(i => i.id !== id);
-            localStorage.setItem('rei_v31_bonus', JSON.stringify(bonusDb));
-            renderBonus();
-        }
-    }
-
     function loadReports() {
         const fMonth = document.getElementById('filterMonth').value;
         const list = document.getElementById('reportList');
         list.innerHTML = '';
+        
         let yIn = 0, yOut = 0;
         db.forEach(i => { if(i.t === 'in') yIn += i.v; else yOut += i.v; });
-        document.getElementById('yearIn').innerText = `R$ ${yIn.toFixed(2)}`;
-        document.getElementById('yearOut').innerText = `R$ ${yOut.toFixed(2)}`;
-        document.getElementById('yearBalance').innerText = `R$ ${(yIn-yOut).toFixed(2)}`;
-        
+        document.getElementById('yearIn').innerText = `R$ ${yIn.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('yearOut').innerText = `R$ ${yOut.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('yearBalance').innerText = `R$ ${(yIn-yOut).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('yearBalance').style.color = (yIn-yOut) >= 0 ? 'var(--success)' : 'var(--danger)';
+
+        let bInv = 0, bSac = 0;
+        bonusDb.forEach(i => { bInv += i.invested; bSac += i.withdrawn; });
+        document.getElementById('repoBonusInv').innerText = `R$ ${bInv.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('repoBonusSac').innerText = `R$ ${bSac.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('repoBonusProfit').innerText = `R$ ${(bSac-bInv).toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        document.getElementById('repoBonusProfit').style.color = (bSac-bInv) >= 0 ? 'var(--success)' : 'var(--bonus-color)';
+
+        let mIn = 0, mOut = 0;
         db.filter(i => i.dt.startsWith(fMonth)).sort((a,b) => new Date(b.dt) - new Date(a.dt)).forEach(i => {
+            if(i.t === 'in') mIn += i.v; else mOut += i.v;
             const div = document.createElement('div');
             div.className = 'item-list';
-            div.innerHTML = `<div><strong>${i.d}</strong><br><small>${i.dt}</small></div>
+            div.innerHTML = `<div><strong>${i.d}</strong><br><small>${i.dt.split('-').reverse().join('/')}</small></div>
                              <div style="display:flex; align-items:center;">
                                 <span style="color:${i.t === 'in' ? 'var(--success)' : 'var(--danger)'}; margin-right:15px">R$ ${i.v.toFixed(2)}</span>
                                 <button class="btn-del" onclick="deleteItem(${i.id})">🗑️</button>
                              </div>`;
             list.appendChild(div);
         });
+        document.getElementById('monthSummary').innerHTML = `<div style="display:flex; justify-content:space-between; font-weight:bold"><span>Saldo Mensal:</span><span style="color:${(mIn-mOut) >= 0 ? 'var(--success)' : 'var(--danger)'}">R$ ${(mIn-mOut).toFixed(2)}</span></div>`;
     }
     updateUI();
 </script>
 
 </body>
 </html>
+
